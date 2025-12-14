@@ -140,6 +140,117 @@
             50% { opacity: 0.5; }
         }
         
+        /* API Key Input Modal */
+        .api-key-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .api-key-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+        
+        .api-key-container h2 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .api-key-container p {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        #api-key-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        #api-key-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .api-key-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .api-key-buttons button {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #save-api-key {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        #save-api-key:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        #demo-mode {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        #demo-mode:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .api-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(30, 144, 255, 0.1);
+            border-radius: 10px;
+            border: 1px solid var(--secondary);
+        }
+        
+        .api-info h4 {
+            color: var(--secondary);
+            margin-bottom: 8px;
+        }
+        
+        .api-info a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .api-info a:hover {
+            text-decoration: underline;
+        }
+        
         /* Main Content */
         .main-content {
             display: grid;
@@ -269,6 +380,28 @@
         .message-content {
             font-size: 1rem;
             line-height: 1.6;
+        }
+        
+        .message-content code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .message-content pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .message-content pre code {
+            background: none;
+            padding: 0;
         }
         
         /* Uploaded Files Preview */
@@ -819,311 +952,417 @@
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                </div>
-                
-                <div class="developer-badge">
-                    <i class="fas fa-code"></i>
-                    <span>Dev: jooo.</span>
-                </div>
+    <!-- API Key Modal -->
+    <div class="api-key-modal" id="api-key-modal">
+        <div class="api-key-container">
+            <h2><i class="fas fa-key"></i> Konfigurasi API Key</h2>
+            <p>Masukkan Google Gemini API key Anda untuk menggunakan JOJO AI. API key Anda akan disimpan secara lokal di browser dan tidak dikirim ke server manapun.</p>
+            
+            <input type="password" id="api-key-input" placeholder="Masukkan API key Gemini Anda di sini...">
+            
+            <div class="api-key-buttons">
+                <button id="save-api-key">
+                    <i class="fas fa-save"></i> Simpan & Lanjutkan
+                </button>
+                <button id="demo-mode">
+                    <i class="fas fa-eye"></i> Mode Demo
+                </button>
+            </div>
+            
+            <div class="api-info">
+                <h4><i class="fas fa-info-circle"></i> Cara mendapatkan API key:</h4>
+                <p>1. Kunjungi <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+                <p>2. Buat API key baru (gratis)</p>
+                <p>3. Salin dan tempel di sini</p>
             </div>
         </div>
-    </header>
+    </div>
     
-    <div class="container">
-        <div class="main-content">
-            <!-- Main Chat Container -->
-            <div class="chat-container">
-                <div class="chat-header">
-                    <h2><i class="fas fa-comment-dots"></i> AI Chat</h2>
-                    <div class="chat-controls">
-                        <button id="clear-chat" title="Clear Chat">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                        <button id="theme-toggle" title="Toggle Theme">
-                            <i class="fas fa-palette"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Chat Messages -->
-                <div class="chat-messages" id="chat-messages">
-                    <!-- Welcome Message -->
-                    <div class="message ai-message">
-                        <div class="message-header">
+    <!-- Main App (hidden until API key is set) -->
+    <div id="main-app" style="display: none;">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">
                             <i class="fas fa-robot"></i>
-                            <span>JOJO AI</span>
+                        </div>
+                        <div class="logo-text">
+                            <h1>JOJO AI</h1>
+                            <div class="tagline">The Ultimate AI Experience</div>
                         </div>
                     </div>
-                </div>
-                
-                <!-- Typing Indicator -->
-                <div class="typing-indicator" id="typing-indicator">
-                    <div class="typing-dots">
-                    <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
-                        <div class="typing-dot"></div>
+                    
+                    <div class="developer-badge">
+                        <i class="fas fa-code"></i>
+                        <span>Dev: jooo.</span>
                     </div>
-                    <span>JOJO AI is thinking...</span>
                 </div>
-                
-                <!-- Input Area -->
-                <div class="input-container">
-                    <div class="input-area">
-                        <div class="input-wrapper">
-                            <!-- Selected Files -->
-                            <div class="selected-files" id="selected-files">
-                                <!-- Selected files will appear here -->
+            </div>
+        </header>
+        
+        <div class="container">
+            <div class="main-content">
+                <!-- Main Chat Container -->
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2><i class="fas fa-comment-dots"></i> AI Chat</h2>
+                        <div class="chat-controls">
+                            <button id="clear-chat" title="Clear Chat">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button id="settings-btn" title="Settings">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Chat Messages -->
+                    <div class="chat-messages" id="chat-messages">
+                        <!-- Welcome Message -->
+                        <div class="message ai-message">
+                            <div class="message-header">
+                                <i class="fas fa-robot"></i>
+                                <span>JOJO AI</span>
                             </div>
-                            
-                            <textarea 
-                                id="user-input" 
-                                placeholder="Ask anything or upload images/files... (Press Enter to send, Shift+Enter for new line)" 
-                                rows="3"
-                                autocomplete="off"
-                                autocorrect="off"
-                                autocapitalize="off"
-                                spellcheck="true"
-                            ></textarea>
-                            
-                            <!-- Input Controls -->
-                            <div class="input-controls">
-                                <div class="input-buttons">
-                                    <!-- File Upload -->
-                                    <div class="input-button" title="Upload File">
-                                        <label for="file-upload" class="file-upload-label">
-                                            <i class="fas fa-paperclip"></i>
-                                        </label>
-                                        <input type="file" id="file-upload" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.txt">
-                                    </div>
-                                    
-                                    <!-- Voice Input -->
-                                    <div class="input-button" id="voice-button" title="Voice Input">
-                                        <i class="fas fa-microphone"></i>
-                                    </div>
+                            <div class="message-content">
+                                <strong>✨ Welcome to JOJO AI</strong><br><br>
+                                <p>I'm your AI assistant powered by Google's Gemini.</p>
+                                <p>You can upload images (JPG, PNG) and files (PDF, TXT) for analysis.</p><br>
+                                <p><strong>🎯 Developed by: ADNAN S.</strong></p>
+                                <p>Ask me anything or upload files to get started!</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Typing Indicator -->
+                    <div class="typing-indicator" id="typing-indicator">
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                        <span>JOJO AI is thinking...</span>
+                    </div>
+                    
+                    <!-- Input Area -->
+                    <div class="input-container">
+                        <div class="input-area">
+                            <div class="input-wrapper">
+                                <!-- Selected Files -->
+                                <div class="selected-files" id="selected-files">
+                                    <!-- Selected files will appear here -->
                                 </div>
                                 
-                                <!-- Quick Actions -->
-                                <div class="quick-actions">
-                                    <div class="quick-action" data-prompt="Analyze this image">
-                                        <i class="fas fa-image"></i> Analyze Image
+                                <textarea 
+                                    id="user-input" 
+                                    placeholder="Ask anything or upload images/files... (Press Enter to send, Shift+Enter for new line)" 
+                                    rows="3"
+                                    autocomplete="off"
+                                    autocorrect="off"
+                                    autocapitalize="off"
+                                    spellcheck="true"
+                                ></textarea>
+                                
+                                <!-- Input Controls -->
+                                <div class="input-controls">
+                                    <div class="input-buttons">
+                                        <!-- File Upload -->
+                                        <div class="input-button" title="Upload File">
+                                            <label for="file-upload" class="file-upload-label">
+                                                <i class="fas fa-paperclip"></i>
+                                            </label>
+                                            <input type="file" id="file-upload" multiple accept=".jpg,.jpeg,.png,.gif,.pdf,.txt">
+                                        </div>
+                                        
+                                        <!-- Voice Input -->
+                                        <div class="input-button" id="voice-button" title="Voice Input">
+                                            <i class="fas fa-microphone"></i>
+                                        </div>
                                     </div>
-                                    <div class="quick-action" data-prompt="Explain quantum computing">
-                                        <i class="fas fa-atom"></i> Quantum
-                                    </div>
-                                    <div class="quick-action" data-prompt="Write Python code">
-                                        <i class="fas fa-code"></i> Code
+                                    
+                                    <!-- Quick Actions -->
+                                    <div class="quick-actions">
+                                        <div class="quick-action" data-prompt="Analyze this image">
+                                            <i class="fas fa-image"></i> Analyze Image
+                                        </div>
+                                        <div class="quick-action" data-prompt="Explain quantum computing">
+                                            <i class="fas fa-atom"></i> Quantum
+                                        </div>
+                                        <div class="quick-action" data-prompt="Write Python code">
+                                            <i class="fas fa-code"></i> Code
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <button id="send-button" class="send-button" title="Send Message">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
                             
-                <!-- Performance Stats -->
-                <div class="card">
-                    <h3><i class="fas fa-chart-line"></i> Stats</h3>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="response-time">0.0s</div>
-                            <div class="stat-label">Response Time</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="message-count">1</div>
-                            <div class="stat-label">Messages</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="file-count">0</div>
-                            <div class="stat-label">Files</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value">100%</div>
-                            <div class="stat-label">Uptime</div>
+                            <button id="send-button" class="send-button" title="Send Message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Image Modal -->
-    <div class="image-modal" id="image-modal">
-        <div class="modal-content">
-            <img id="modal-image" src="" alt="Full size image">
-            <button class="close-modal" id="close-modal">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="copyright">
-                    © 2025 JOJO AI • Powered by jooo.
                 </div>
                 
-                <div class="model-info">
-                    <i class="fas fa-microchip"></i>
-                    <span>AI Pro • Vision Enabled</span>
+                <!-- Sidebar -->
+                <div class="sidebar">
+                    <!-- Capabilities -->
+                    <div class="card">
+                        <h3><i class="fas fa-bolt"></i> Capabilities</h3>
+                        <div class="capabilities-grid">
+                            <div class="capability-item">
+                                <i class="fas fa-image capability-icon"></i>
+                                <span>Image Analysis</span>
+                            </div>
+                            <div class="capability-item">
+                                <i class="fas fa-file-alt capability-icon"></i>
+                                <span>Document Reading</span>
+                            </div>
+                            <div class="capability-item">
+                                <i class="fas fa-code capability-icon"></i>
+                                <span>Code Generation</span>
+                            </div>
+                            <div class="capability-item">
+                                <i class="fas fa-brain capability-icon"></i>
+                                <span>Creative Writing</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Supported Files -->
+                    <div class="card">
+                        <h3><i class="fas fa-folder-open"></i> Supported Files</h3>
+                        <div class="files-support">
+                            <span class="file-type-badge">JPG</span>
+                            <span class="file-type-badge">PNG</span>
+                            <span class="file-type-badge">PDF</span>
+                            <span class="file-type-badge">TXT</span>
+                            <span class="file-type-badge">GIF</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Prompts -->
+                    <div class="card">
+                        <h3><i class="fas fa-lightbulb"></i> Quick Prompts</h3>
+                        <div class="prompts-grid">
+                            <div class="prompt-item" data-prompt="Write a Python function to sort a list">
+                                Write a Python function to sort a list
+                            </div>
+                            <div class="prompt-item" data-prompt="Explain the theory of relativity in simple terms">
+                                Explain theory of relativity
+                            </div>
+                            <div class="prompt-item" data-prompt="Create a business plan outline for a startup">
+                                Business plan outline
+                            </div>
+                            <div class="prompt-item" data-prompt="Translate this to Indonesian: Hello, how are you?">
+                                Translate to Indonesian
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Stats -->
+                    <div class="card">
+                        <h3><i class="fas fa-chart-line"></i> Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="response-time">0.0s</div>
+                                <div class="stat-label">Response Time</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="message-count">1</div>
+                                <div class="stat-label">Messages</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="file-count">0</div>
+                                <div class="stat-label">Files</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">100%</div>
+                                <div class="stat-label">Uptime</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </footer>
+        
+        <!-- Image Modal -->
+        <div class="image-modal" id="image-modal">
+            <div class="modal-content">
+                <img id="modal-image" src="" alt="Full size image">
+                <button class="close-modal" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div class="copyright">
+                        © 2025 JOJO AI • Powered by jooo.
+                    </div>
+                    
+                    <div class="model-info">
+                        <i class="fas fa-microchip"></i>
+                        <span>AI Pro • Vision Enabled</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
     
     <script>
-        // ================ API CONFIGURATION ================
-        const API_KEY = "AIzaSyBhCFxbJkTwXtElPhjBcUujKli-TmugPZw";
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+        // ================ API KEY MANAGEMENT ================
+        // API key akan disimpan di localStorage browser pengguna
+        const STORAGE_KEY = 'jojo_ai_api_key';
         
-        // ================ DOM ELEMENTS ================
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const sendButton = document.getElementById('send-button');
-        const typingIndicator = document.getElementById('typing-indicator');
-        const clearChatBtn = document.getElementById('clear-chat');
-        const exportChatBtn = document.getElementById('export-chat');
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const fileUpload = document.getElementById('file-upload');
-        const selectedFilesContainer = document.getElementById('selected-files');
-        const voiceButton = document.getElementById('voice-button');
-        const imageModal = document.getElementById('image-modal');
-        const modalImage = document.getElementById('modal-image');
-        const closeModal = document.getElementById('close-modal');
-        const quickActions = document.querySelectorAll('.quick-action');
-        const promptItems = document.querySelectorAll('.prompt-item');
-        const responseTimeEl = document.getElementById('response-time');
-        const messageCountEl = document.getElementById('message-count');
-        const fileCountEl = document.getElementById('file-count');
+        // DOM Elements
+        const apiKeyModal = document.getElementById('api-key-modal');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const saveApiKeyBtn = document.getElementById('save-api-key');
+        const demoModeBtn = document.getElementById('demo-mode');
+        const mainApp = document.getElementById('main-app');
         
-        // ================ STATE VARIABLES ================
-        let chatHistory = [];
-        let isProcessing = false;
-        let messageCount = 1;
-        let fileCount = 0;
-        let selectedFiles = [];
-        
-        // ================ UTILITY FUNCTIONS ================
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-        }
-        
-        function getFileIcon(fileType) {
-            if (fileType.startsWith('image/')) return 'fa-image';
-            if (fileType.includes('pdf')) return 'fa-file-pdf';
-            if (fileType.includes('text')) return 'fa-file-alt';
-            return 'fa-file';
-        }
-        
-        // ================ FILE UPLOAD HANDLING ================
-        fileUpload.addEventListener('change', handleFileUpload);
-        
-        function handleFileUpload(e) {
-            const files = Array.from(e.target.files);
+        // Initialize
+        function initApp() {
+            const savedApiKey = localStorage.getItem(STORAGE_KEY);
             
-            files.forEach(file => {
-                // Validate file size (max 5MB)
-                if (file.size > 5 * 1024 * 1024) {
-                    alert(`File ${file.name} is too large. Maximum size is 5MB.`);
-                    return;
-                }
-                
-                // Validate file type
-                const allowedTypes = [
-                    'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
-                    'application/pdf', 'text/plain'
-                ];
-                
-                if (!allowedTypes.includes(file.type)) {
-                    alert(`File type not supported: ${file.name}. Please upload JPG, PNG, PDF, or TXT files.`);
-                    return;
-                }
-                
-                // Add to selected files
-                if (selectedFiles.length >= 5) {
-                    alert('Maximum 5 files allowed at once.');
-                    return;
-                }
-                
-                selectedFiles.push(file);
-                fileCount++;
-                fileCountEl.textContent = fileCount;
-                
-                // Create file preview
-                const fileDiv = document.createElement('div');
-                fileDiv.className = 'selected-file';
-                fileDiv.dataset.filename = file.name;
-                
-                const fileIcon = getFileIcon(file.type);
-                
-                fileDiv.innerHTML = `
-                    <i class="fas ${fileIcon} file-icon"></i>
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${formatFileSize(file.size)}</div>
-                    </div>
-                    <button class="remove-file" onclick="removeSelectedFile('${file.name}')">
-                        <i class="fas fa-times"></i>
-                    </button>
-                `;
-                
-                selectedFilesContainer.appendChild(fileDiv);
-            });
-            
-            // Reset file input
-            fileUpload.value = '';
-        }
-        
-        window.removeSelectedFile = function(filename) {
-            selectedFiles = selectedFiles.filter(file => file.name !== filename);
-            fileCount--;
-            fileCountEl.textContent = fileCount;
-            
-            const fileDiv = document.querySelector(`.selected-file[data-filename="${filename}"]`);
-            if (fileDiv) {
-                fileDiv.remove();
+            if (savedApiKey && savedApiKey.startsWith('AIza')) {
+                // API key sudah ada, langsung tampilkan app
+                apiKeyModal.style.display = 'none';
+                mainApp.style.display = 'block';
+                initChatApp(savedApiKey);
+            } else {
+                // Tampilkan modal untuk input API key
+                apiKeyModal.style.display = 'flex';
+                mainApp.style.display = 'none';
             }
-        };
+        }
         
-        // ================ MESSAGE HANDLING ================
-        function addMessage(content, isUser = false, files = []) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+        // Save API key
+        saveApiKeyBtn.addEventListener('click', () => {
+            const apiKey = apiKeyInput.value.trim();
             
-            const header = document.createElement('div');
-            header.className = 'message-header';
+            if (!apiKey) {
+                alert('Masukkan API key terlebih dahulu!');
+                return;
+            }
             
-            const icon = document.createElement('i');
-            icon.className = isUser ? 'fas fa-user' : 'fas fa-robot';
+            if (!apiKey.startsWith('AIza')) {
+                alert('Format API key tidak valid! API key Gemini harus dimulai dengan "AIza"');
+                return;
+            }
             
-            const sender = document.createElement('span');
-            sender.textContent = isUser ? 'You' : 'JOJO AI';
+            localStorage.setItem(STORAGE_KEY, apiKey);
+            apiKeyModal.style.display = 'none';
+            mainApp.style.display = 'block';
+            initChatApp(apiKey);
+        });
+        
+        // Demo mode
+        demoModeBtn.addEventListener('click', () => {
+            localStorage.setItem(STORAGE_KEY, 'demo_mode');
+            apiKeyModal.style.display = 'none';
+            mainApp.style.display = 'block';
+            initChatApp('demo_mode');
+        });
+        
+        // Settings button to change API key
+        document.getElementById('settings-btn').addEventListener('click', () => {
+            if (confirm('Ubah API key? Anda akan kembali ke halaman setup.')) {
+                localStorage.removeItem(STORAGE_KEY);
+                apiKeyModal.style.display = 'flex';
+                mainApp.style.display = 'none';
+                apiKeyInput.value = '';
+                apiKeyInput.focus();
+            }
+        });
+        
+        // ================ CHAT APP INITIALIZATION ================
+        function initChatApp(apiKey) {
+            // ================ API CONFIGURATION ================
+            const API_KEY = apiKey === 'demo_mode' ? '' : apiKey;
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
             
-            header.appendChild(icon);
-            header.appendChild(sender);
+            // ================ DOM ELEMENTS ================
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const clearChatBtn = document.getElementById('clear-chat');
+            const fileUpload = document.getElementById('file-upload');
+            const selectedFilesContainer = document.getElementById('selected-files');
+            const voiceButton = document.getElementById('voice-button');
+            const imageModal = document.getElementById('image-modal');
+            const modalImage = document.getElementById('modal-image');
+            const closeModal = document.getElementById('close-modal');
+            const quickActions = document.querySelectorAll('.quick-action');
+            const promptItems = document.querySelectorAll('.prompt-item');
+            const responseTimeEl = document.getElementById('response-time');
+            const messageCountEl = document.getElementById('message-count');
+            const fileCountEl = document.getElementById('file-count');
             
-            const contentDiv = document.createElement('div');
-            contentDiv.className = 'message-content';
+            // ================ STATE VARIABLES ================
+            let chatHistory = [];
+            let isProcessing = false;
+            let messageCount = 1;
+            let fileCount = 0;
+            let selectedFiles = [];
             
-            // Add files if present
-            if (files.length > 0 && isUser) {
-                const filesContainer = document.createElement('div');
-                filesContainer.className = 'uploaded-files';
+            // ================ UTILITY FUNCTIONS ================
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+            }
+            
+            function getFileIcon(fileType) {
+                if (fileType.startsWith('image/')) return 'fa-image';
+                if (fileType.includes('pdf')) return 'fa-file-pdf';
+                if (fileType.includes('text')) return 'fa-file-alt';
+                return 'fa-file';
+            }
+            
+            // ================ FILE UPLOAD HANDLING ================
+            fileUpload.addEventListener('change', handleFileUpload);
+            
+            function handleFileUpload(e) {
+                const files = Array.from(e.target.files);
                 
                 files.forEach(file => {
+                    // Validate file size (max 5MB)
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+                        return;
+                    }
+                    
+                    // Validate file type
+                    const allowedTypes = [
+                        'image/jpeg', 'image/jpg', 'image/png', 'image/gif',
+                        'application/pdf', 'text/plain'
+                    ];
+                    
+                    if (!allowedTypes.includes(file.type)) {
+                        alert(`File type not supported: ${file.name}. Please upload JPG, PNG, PDF, or TXT files.`);
+                        return;
+                    }
+                    
+                    // Add to selected files
+                    if (selectedFiles.length >= 5) {
+                        alert('Maximum 5 files allowed at once.');
+                        return;
+                    }
+                    
+                    selectedFiles.push(file);
+                    fileCount++;
+                    fileCountEl.textContent = fileCount;
+                    
+                    // Create file preview
                     const fileDiv = document.createElement('div');
-                    fileDiv.className = 'file-item';
+                    fileDiv.className = 'selected-file';
+                    fileDiv.dataset.filename = file.name;
                     
                     const fileIcon = getFileIcon(file.type);
                     
@@ -1133,330 +1372,360 @@
                             <div class="file-name">${file.name}</div>
                             <div class="file-size">${formatFileSize(file.size)}</div>
                         </div>
+                        <button class="remove-file" onclick="removeSelectedFile('${file.name}')">
+                            <i class="fas fa-times"></i>
+                        </button>
                     `;
                     
-                    filesContainer.appendChild(fileDiv);
-                    
-                    // If it's an image, create preview
-                    if (file.type.startsWith('image/')) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const imgContainer = document.createElement('div');
-                            imgContainer.className = 'image-preview';
-                            imgContainer.innerHTML = `<img src="${e.target.result}" alt="${file.name}" onclick="openImageModal('${e.target.result}')">`;
-                            contentDiv.appendChild(imgContainer);
-                        };
-                        reader.readAsDataURL(file);
-                    }
+                    selectedFilesContainer.appendChild(fileDiv);
                 });
                 
-                contentDiv.appendChild(filesContainer);
+                // Reset file input
+                fileUpload.value = '';
             }
             
-            // Add text content
-            contentDiv.innerHTML += formatMessage(content);
+            window.removeSelectedFile = function(filename) {
+                selectedFiles = selectedFiles.filter(file => file.name !== filename);
+                fileCount--;
+                fileCountEl.textContent = fileCount;
+                
+                const fileDiv = document.querySelector(`.selected-file[data-filename="${filename}"]`);
+                if (fileDiv) {
+                    fileDiv.remove();
+                }
+            };
             
-            messageDiv.appendChild(header);
-            messageDiv.appendChild(contentDiv);
+            // ================ MESSAGE HANDLING ================
+            function addMessage(content, isUser = false, files = []) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+                
+                const header = document.createElement('div');
+                header.className = 'message-header';
+                
+                const icon = document.createElement('i');
+                icon.className = isUser ? 'fas fa-user' : 'fas fa-robot';
+                
+                const sender = document.createElement('span');
+                sender.textContent = isUser ? 'You' : 'JOJO AI';
+                
+                header.appendChild(icon);
+                header.appendChild(sender);
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                
+                // Add files if present
+                if (files.length > 0 && isUser) {
+                    const filesContainer = document.createElement('div');
+                    filesContainer.className = 'uploaded-files';
+                    
+                    files.forEach(file => {
+                        const fileDiv = document.createElement('div');
+                        fileDiv.className = 'file-item';
+                        
+                        const fileIcon = getFileIcon(file.type);
+                        
+                        fileDiv.innerHTML = `
+                            <i class="fas ${fileIcon} file-icon"></i>
+                            <div class="file-info">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-size">${formatFileSize(file.size)}</div>
+                            </div>
+                        `;
+                        
+                        filesContainer.appendChild(fileDiv);
+                        
+                        // If it's an image, create preview
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const imgContainer = document.createElement('div');
+                                imgContainer.className = 'image-preview';
+                                imgContainer.innerHTML = `<img src="${e.target.result}" alt="${file.name}" onclick="openImageModal('${e.target.result}')">`;
+                                contentDiv.appendChild(imgContainer);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+                    
+                    contentDiv.appendChild(filesContainer);
+                }
+                
+                // Add text content
+                contentDiv.innerHTML += formatMessage(content);
+                
+                messageDiv.appendChild(header);
+                messageDiv.appendChild(contentDiv);
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                return messageDiv;
+            }
             
-            chatMessages.appendChild(messageDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            function formatMessage(text) {
+                if (!text) return '';
+                
+                // Format code blocks
+                text = text.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+                
+                // Format inline code
+                text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+                
+                // Format bold and italic
+                text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // Format line breaks and paragraphs
+                text = text.replace(/\n\n/g, '</p><p>');
+                text = text.replace(/\n/g, '<br>');
+                text = '<p>' + text + '</p>';
+                
+                return text;
+            }
             
-            return messageDiv;
-        }
-        
-        function formatMessage(text) {
-            if (!text) return '';
-            return text
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/`([^`]+)`/g, '<code>$1</code>')
-                .replace(/\n\n/g, '</p><p>')
-                .replace(/\n/g, '<br>')
-                .replace(/^(.+)$/gm, '<p>$1</p>')
-                .replace(/<p><\/p>/g, '');
-        }
-        
-        // ================ IMAGE MODAL ================
-        window.openImageModal = function(imageSrc) {
-            modalImage.src = imageSrc;
-            imageModal.classList.add('active');
-        };
-        
-        closeModal.addEventListener('click', () => {
-            imageModal.classList.remove('active');
-        });
-        
-        imageModal.addEventListener('click', (e) => {
-            if (e.target === imageModal) {
+            // ================ IMAGE MODAL ================
+            window.openImageModal = function(imageSrc) {
+                modalImage.src = imageSrc;
+                imageModal.classList.add('active');
+            };
+            
+            closeModal.addEventListener('click', () => {
                 imageModal.classList.remove('active');
-            }
-        });
-        
-        // ================ API COMMUNICATION ================
-        async function sendToGemini(message, files = []) {
-            const startTime = performance.now();
-            isProcessing = true;
+            });
             
-            typingIndicator.style.display = 'flex';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    imageModal.classList.remove('active');
+                }
+            });
             
-            try {
-                // Build content parts
-                const contentParts = [{ text: message }];
+            // ================ API COMMUNICATION ================
+            async function sendToGemini(message, files = []) {
+                if (API_KEY === 'demo_mode') {
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    return "**Demo Mode**: Anda sedang menggunakan mode demo. Untuk menggunakan JOJO AI dengan fitur lengkap, silakan masukkan API key Gemini Anda yang valid. Kunjungi https://aistudio.google.com/app/apikey untuk mendapatkan API key gratis.\n\n*Pesan demo ini akan muncul sebagai respons dari AI.*";
+                }
                 
-                // Add files as inline data (images only)
-                for (const file of files) {
-                    if (file.type.startsWith('image/')) {
-                        const base64Data = await fileToBase64(file);
-                        contentParts.push({
-                            inline_data: {
-                                mime_type: file.type,
-                                data: base64Data
-                            }
+                const startTime = performance.now();
+                isProcessing = true;
+                
+                typingIndicator.style.display = 'flex';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                try {
+                    // Build content parts
+                    const contentParts = [{ text: message }];
+                    
+                    // Add files as inline data (images only)
+                    for (const file of files) {
+                        if (file.type.startsWith('image/')) {
+                            const base64Data = await fileToBase64(file);
+                            contentParts.push({
+                                inline_data: {
+                                    mime_type: file.type,
+                                    data: base64Data
+                                }
+                            });
+                        }
+                    }
+                    
+                    const payload = {
+                        contents: [{
+                            role: "user",
+                            parts: contentParts
+                        }],
+                        generationConfig: {
+                            temperature: 0.7,
+                            maxOutputTokens: 2048,
+                        }
+                    };
+                    
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error?.message || `API Error ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    // Calculate response time
+                    const endTime = performance.now();
+                    const responseTime = (endTime - startTime) / 1000;
+                    responseTimeEl.textContent = `${responseTime.toFixed(1)}s`;
+                    
+                    let aiResponse = '';
+                    
+                    if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                        aiResponse = data.candidates[0].content.parts[0].text;
+                        
+                        // Store in history
+                        chatHistory.push({
+                            role: "user",
+                            parts: [{ text: message }]
                         });
+                        chatHistory.push({
+                            role: "model", 
+                            parts: [{ text: aiResponse }]
+                        });
+                        
+                        // Limit history
+                        if (chatHistory.length > 10) {
+                            chatHistory = chatHistory.slice(-10);
+                        }
+                    } else {
+                        aiResponse = "I received an unexpected response. Please try again.";
                     }
+                    
+                    return aiResponse;
+                    
+                } catch (error) {
+                    console.error('API Error:', error);
+                    
+                    const endTime = performance.now();
+                    const responseTime = (endTime - startTime) / 1000;
+                    responseTimeEl.textContent = `${responseTime.toFixed(1)}s`;
+                    
+                    if (error.message.includes('API key') || error.message.includes('quota')) {
+                        return "**Error**: API key tidak valid atau kuota habis. Silakan periksa:\n1. API key Anda di https://aistudio.google.com/app/apikey\n2. Pastikan billing diaktifkan di Google Cloud Console\n3. Coba API key yang berbeda";
+                    }
+                    
+                    return `**Error**: ${error.message}. Please try again.`;
+                    
+                } finally {
+                    typingIndicator.style.display = 'none';
+                    isProcessing = false;
                 }
-                
-                const payload = {
-                    contents: [{
-                        role: "user",
-                        parts: contentParts
-                    }],
-                    generationConfig: {
-                        temperature: 0.7,
-                        maxOutputTokens: 2048,
-                    }
-                };
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload)
+            }
+            
+            async function fileToBase64(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => {
+                        const base64 = reader.result.split(',')[1];
+                        resolve(base64);
+                    };
+                    reader.onerror = reject;
                 });
-                
-                if (!response.ok) {
-                    throw new Error(`API Error ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                // Calculate response time
-                const endTime = performance.now();
-                const responseTime = (endTime - startTime) / 1000;
-                responseTimeEl.textContent = `${responseTime.toFixed(1)}s`;
-                
-                let aiResponse = '';
-                
-                if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-                    aiResponse = data.candidates[0].content.parts[0].text;
-                    
-                    // Store in history
-                    chatHistory.push({
-                        role: "user",
-                        parts: [{ text: message }]
-                    });
-                    chatHistory.push({
-                        role: "model", 
-                        parts: [{ text: aiResponse }]
-                    });
-                    
-                    // Limit history
-                    if (chatHistory.length > 10) {
-                        chatHistory = chatHistory.slice(-10);
-                    }
-                } else {
-                    aiResponse = "I received an unexpected response. Please try again.";
-                }
-                
-                return aiResponse;
-                
-            } catch (error) {
-                console.error('API Error:', error);
-                
-                const endTime = performance.now();
-                const responseTime = (endTime - startTime) / 1000;
-                responseTimeEl.textContent = `${responseTime.toFixed(1)}s`;
-                
-                if (error.message.includes('API key')) {
-                    return "API key error. Please check your configuration.";
-                }
-                
-                return `Error: ${error.message}. Please try again.`;
-                
-            } finally {
-                typingIndicator.style.display = 'none';
-                isProcessing = false;
             }
-        }
-        
-        async function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => {
-                    const base64 = reader.result.split(',')[1];
-                    resolve(base64);
-                };
-                reader.onerror = reject;
-            });
-        }
-        
-        // ================ INPUT HANDLING ================
-        async function handleUserInput() {
-            const message = userInput.value.trim();
-            const files = [...selectedFiles];
             
-            if ((!message && files.length === 0) || isProcessing) return;
-            
-            // Add user message
-            addMessage(message, true, files);
-            
-            // Clear input
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            selectedFiles = [];
-            selectedFilesContainer.innerHTML = '';
-            fileCount = 0;
-            fileCountEl.textContent = '0';
-            
-            // Disable send button
-            sendButton.disabled = true;
-            sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            
-            try {
-                // Send to Gemini
-                const aiResponse = await sendToGemini(message, files);
+            // ================ INPUT HANDLING ================
+            async function handleUserInput() {
+                const message = userInput.value.trim();
+                const files = [...selectedFiles];
                 
-                // Add AI response
-                addMessage(aiResponse, false);
+                if ((!message && files.length === 0) || isProcessing) return;
                 
-                // Update message count
-                messageCount++;
-                messageCountEl.textContent = messageCount;
+                // Add user message
+                addMessage(message, true, files);
                 
-            } catch (error) {
-                console.error('Error:', error);
-                addMessage("Sorry, there was an error processing your request. Please try again.", false);
-            } finally {
-                // Re-enable send button
-                sendButton.disabled = false;
-                sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
-                userInput.focus();
-            }
-        }
-        
-        // ================ EVENT LISTENERS ================
-        sendButton.addEventListener('click', handleUserInput);
-        
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey && !isProcessing) {
-                e.preventDefault();
-                handleUserInput();
-            }
-        });
-        
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
-        
-        voiceButton.addEventListener('click', () => {
-            addMessage("Voice input feature coming soon! Please type your message or upload files.", false);
-        });
-        
-        quickActions.forEach(btn => {
-            btn.addEventListener('click', () => {
-                userInput.value = btn.getAttribute('data-prompt');
-                userInput.focus();
+                // Clear input
+                userInput.value = '';
                 userInput.style.height = 'auto';
-                userInput.style.height = (userInput.scrollHeight) + 'px';
-            });
-        });
-        
-        promptItems.forEach(btn => {
-            btn.addEventListener('click', () => {
-                userInput.value = btn.getAttribute('data-prompt');
-                userInput.focus();
-            });
-        });
-        
-        clearChatBtn.addEventListener('click', () => {
-            if (confirm('Clear entire conversation?')) {
-                chatMessages.innerHTML = '';
-                chatHistory = [];
                 selectedFiles = [];
                 selectedFilesContainer.innerHTML = '';
-                messageCount = 1;
-                messageCountEl.textContent = '1';
                 fileCount = 0;
                 fileCountEl.textContent = '0';
-                responseTimeEl.textContent = '0.0s';
                 
-                // Add welcome message
-                addMessage(`<strong>✨ Welcome to JOJO AI</strong><br><br>
-                    <p>I'm your AI assistant powered by Google's Gemini.</p>
-                    <p>You can upload images (JPG, PNG) and files (PDF, TXT) for analysis.</p><br>
-                    <p><strong>🎯 Developed by: ADNAN S.</strong></p>
-                    <p>Ask me anything or upload files to get started!</p>`, false);
+                // Disable send button
+                sendButton.disabled = true;
+                sendButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                
+                try {
+                    // Send to Gemini
+                    const aiResponse = await sendToGemini(message, files);
+                    
+                    // Add AI response
+                    addMessage(aiResponse, false);
+                    
+                    // Update message count
+                    messageCount++;
+                    messageCountEl.textContent = messageCount;
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage("Sorry, there was an error processing your request. Please try again.", false);
+                } finally {
+                    // Re-enable send button
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                    userInput.focus();
+                }
             }
-        });
-        
-        exportChatBtn.addEventListener('click', () => {
-            let chatText = "JOJO AI Conversation\n";
-            chatText += "=".repeat(50) + "\n\n";
-            chatText += "Date: " + new Date().toLocaleString() + "\n\n";
             
-            const messages = chatMessages.querySelectorAll('.message');
-            messages.forEach(msg => {
-                const sender = msg.querySelector('.message-header span').textContent;
-                const content = msg.querySelector('.message-content').textContent;
-                chatText += `${sender}:\n${content}\n\n`;
+            // ================ EVENT LISTENERS ================
+            sendButton.addEventListener('click', handleUserInput);
+            
+            userInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey && !isProcessing) {
+                    e.preventDefault();
+                    handleUserInput();
+                }
             });
             
-            const blob = new Blob([chatText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `jojo-ai-chat-${Date.now()}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        });
-        
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('light-theme');
-            const icon = themeToggleBtn.querySelector('i');
-            if (document.body.classList.contains('light-theme')) {
-                icon.className = 'fas fa-moon';
-                document.documentElement.style.setProperty('--dark-bg', '#f8fafc');
-                document.documentElement.style.setProperty('--darker-bg', '#e2e8f0');
-                document.documentElement.style.setProperty('--card-bg', '#ffffff');
-                document.documentElement.style.setProperty('--text', '#1e293b');
-                document.documentElement.style.setProperty('--text-secondary', '#64748b');
-                document.documentElement.style.setProperty('--input-bg', '#f1f5f9');
-                document.documentElement.style.setProperty('--border', '#e2e8f0');
-            } else {
-                icon.className = 'fas fa-palette';
-                document.documentElement.style.setProperty('--dark-bg', '#0A0F1C');
-                document.documentElement.style.setProperty('--darker-bg', '#070B16');
-                document.documentElement.style.setProperty('--card-bg', '#1A1F35');
-                document.documentElement.style.setProperty('--text', '#FFFFFF');
-                document.documentElement.style.setProperty('--text-secondary', '#A0A8C3');
-                document.documentElement.style.setProperty('--input-bg', 'rgba(26, 31, 53, 0.8)');
-                document.documentElement.style.setProperty('--border', 'rgba(255, 255, 255, 0.1)');
-            }
-        });
-        
-        // ================ INITIALIZATION ================
-        document.addEventListener('DOMContentLoaded', () => {
+            userInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            voiceButton.addEventListener('click', () => {
+                addMessage("Voice input feature coming soon! Please type your message or upload files.", false);
+            });
+            
+            quickActions.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    userInput.value = btn.getAttribute('data-prompt');
+                    userInput.focus();
+                    userInput.style.height = 'auto';
+                    userInput.style.height = (userInput.scrollHeight) + 'px';
+                });
+            });
+            
+            promptItems.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    userInput.value = btn.getAttribute('data-prompt');
+                    userInput.focus();
+                });
+            });
+            
+            clearChatBtn.addEventListener('click', () => {
+                if (confirm('Clear entire conversation?')) {
+                    chatMessages.innerHTML = '';
+                    chatHistory = [];
+                    selectedFiles = [];
+                    selectedFilesContainer.innerHTML = '';
+                    messageCount = 1;
+                    messageCountEl.textContent = '1';
+                    fileCount = 0;
+                    fileCountEl.textContent = '0';
+                    responseTimeEl.textContent = '0.0s';
+                    
+                    // Add welcome message
+                    addMessage(`<strong>✨ Welcome to JOJO AI</strong><br><br>
+                        <p>I'm your AI assistant powered by Google's Gemini.</p>
+                        <p>You can upload images (JPG, PNG) and files (PDF, TXT) for analysis.</p><br>
+                        <p><strong>🎯 Developed by: ADNAN S.</strong></p>
+                        <p>Ask me anything or upload files to get started!</p>`, false);
+                }
+            });
+            
+            // ================ INITIALIZATION ================
             userInput.focus();
             console.log('JOJO AI initialized');
             console.log('Developer: ADNAN S.');
-        });
+        }
+        
+        // Start the app
+        initApp();
     </script>
 </body>
 </html>
