@@ -320,16 +320,30 @@
         .api-key-buttons {
             display: flex;
             gap: 15px;
+            flex-direction: column;
         }
         
         .api-key-buttons button {
-            flex: 1;
             padding: 15px;
             border-radius: 12px;
             border: none;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        #test-api-key {
+            background: linear-gradient(135deg, var(--secondary), #4169E1);
+            color: white;
+        }
+        
+        #test-api-key:hover {
+            background: linear-gradient(135deg, #4169E1, #1C6EA4);
+            transform: translateY(-2px);
         }
         
         #save-api-key {
@@ -350,45 +364,6 @@
         
         #demo-mode:hover {
             background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .api-options {
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        
-        .api-option-btn {
-            padding: 12px 15px;
-            background: rgba(30, 144, 255, 0.1);
-            border: 1px solid rgba(30, 144, 255, 0.3);
-            border-radius: 10px;
-            color: var(--text);
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .api-option-btn:hover {
-            background: rgba(30, 144, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        .api-option-btn i {
-            color: var(--secondary);
-        }
-        
-        .api-option-btn .key-type {
-            font-size: 0.8rem;
-            color: var(--success);
-            margin-left: auto;
-            padding: 2px 8px;
-            background: rgba(46, 213, 115, 0.2);
-            border-radius: 10px;
         }
         
         .api-info {
@@ -412,6 +387,27 @@
         
         .api-info a:hover {
             text-decoration: underline;
+        }
+        
+        .api-status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 10px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .api-status.success {
+            background: rgba(46, 213, 115, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+        
+        .api-status.error {
+            background: rgba(255, 71, 87, 0.1);
+            border: 1px solid #FF4757;
+            color: #FF4757;
         }
         
         /* Main Content */
@@ -1133,14 +1129,8 @@
                 max-width: 140px;
             }
             
-            .api-options {
-                display: flex;
+            .api-key-buttons {
                 flex-direction: column;
-            }
-            
-            .api-option-btn {
-                font-size: 0.9rem;
-                padding: 10px;
             }
             
             .password-container {
@@ -1167,10 +1157,6 @@
             
             .api-key-container {
                 padding: 20px;
-            }
-            
-            .api-key-buttons {
-                flex-direction: column;
             }
         }
     </style>
@@ -1201,7 +1187,7 @@
             
             <div class="password-hint">
                 <i class="fas fa-key"></i>
-                <strong>Password:</strong> ADNAN2709 (Hanya untuk pengguna yang diizinkan)
+                <strong>Welcome</strong> to JOJO AI 
             </div>
         </div>
     </div>
@@ -1209,49 +1195,37 @@
     <!-- API Key Modal (Hidden until password is correct) -->
     <div class="api-key-modal" id="api-key-modal">
         <div class="api-key-container">
-            <h2><i class="fas fa-key"></i> Konfigurasi JOJO AI</h2>
-            <p>Pilih metode autentikasi untuk menggunakan JOJO AI. API key akan disimpan secara lokal di browser Anda.</p>
+            <h2><i class="fas fa-key"></i> Konfigurasi API Key JOJO AI</h2>
+            <p>Masukkan API key Gemini yang valid untuk mengaktifkan JOJO AI.</p>
             
-            <input type="text" id="api-key-input" placeholder="Atau masukkan API key Gemini kustom Anda...">
+            <input type="text" id="api-key-input" placeholder="Masukkan API key Gemini Anda di sini...">
             
-            <div class="api-options">
-                <button class="api-option-btn" id="default-api-btn">
-                    <i class="fas fa-bolt"></i>
-                    <div>
-                        <strong>Gunakan API Key Default</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
-                            API key yang telah disediakan (siap digunakan)
-                        </div>
-                    </div>
-                    <span class="key-type">Recommended</span>
+            <div class="api-key-buttons">
+                <button id="test-api-key">
+                    <i class="fas fa-vial"></i>
+                    Test API Key
                 </button>
                 
-                <button class="api-option-btn" id="custom-api-btn">
-                    <i class="fas fa-user-cog"></i>
-                    <div>
-                        <strong>Gunakan API Key Saya</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
-                            Masukkan API key Gemini Anda sendiri
-                        </div>
-                    </div>
+                <button id="save-api-key">
+                    <i class="fas fa-save"></i>
+                    Simpan & Lanjutkan
                 </button>
                 
-                <button class="api-option-btn" id="demo-btn">
+                <button id="demo-mode">
                     <i class="fas fa-eye"></i>
-                    <div>
-                        <strong>Mode Demo</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px;">
-                            Coba fitur tanpa API key
-                        </div>
-                    </div>
+                    Mode Demo
                 </button>
             </div>
             
+            <div class="api-status" id="api-status"></div>
+            
             <div class="api-info">
-                <h4><i class="fas fa-info-circle"></i> Info API Key:</h4>
-                <p>• API key default dapat digunakan untuk percobaan (mungkin memiliki batas penggunaan)</p>
-                <p>• Untuk penggunaan intensif, gunakan API key Anda sendiri dari <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
-                <p>• Semua API key disimpan secara lokal dan aman di browser Anda</p>
+                <h4><i class="fas fa-info-circle"></i> Cara mendapatkan API key gratis:</h4>
+                <p>1. Kunjungi <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></p>
+                <p>2. Login dengan akun Google</p>
+                <p>3. Klik "Create API Key" → "Create API key in new project"</p>
+                <p>4. Salin API key dan tempel di atas</p>
+                <p><strong>Catatan:</strong> Aktifkan billing di Google Cloud Console (gratis $300 credit)</p>
             </div>
         </div>
     </div>
@@ -1374,8 +1348,8 @@
                                     
                                     <!-- Quick Actions -->
                                     <div class="quick-actions">
-                                        <div class="quick-action" data-prompt="Analyze this image">
-                                            <i class="fas fa-image"></i> Analyze Image
+                                        <div class="quick-action" data-prompt="Hello, how are you?">
+                                            <i class="fas fa-comment"></i> Say Hello
                                         </div>
                                         <div class="quick-action" data-prompt="Explain quantum computing">
                                             <i class="fas fa-atom"></i> Quantum
@@ -1467,7 +1441,7 @@
                                 <div class="stat-label">Files</div>
                             </div>
                             <div class="stat-item">
-                                <div class="stat-value" id="api-status">Active</div>
+                                <div class="stat-value" id="api-status-text">Active</div>
                                 <div class="stat-label">API Status</div>
                             </div>
                         </div>
@@ -1581,6 +1555,11 @@
                 passwordInput.value = '';
                 
                 showNotification('Authentication successful!', 'success');
+                
+                // Auto-focus on API key input
+                setTimeout(() => {
+                    document.getElementById('api-key-input').focus();
+                }, 100);
             } else {
                 // Password incorrect
                 loginError.textContent = "Password salah! Coba lagi.";
@@ -1609,13 +1588,17 @@
         
         // ================ API KEY MANAGEMENT ================
         const API_KEY_STORAGE_KEY = 'jojo_ai_api_key';
-        const DEFAULT_API_KEY = 'AIzaSyDZBSQJA3yrjovzEF6vroIJ4KnAJpdsBW4';
+        const ACTIVE_API_KEYS = [
+            'AIzaSyCJ_kbgcybaduNoSiHlluryDT6Q7xxqrRU',
+            'AIzaSyBhCFxbJkTwXtElPhjBcUujKli-TmugPZw'
+        ];
         
         // DOM Elements for API key modal
         const apiKeyInput = document.getElementById('api-key-input');
-        const defaultApiBtn = document.getElementById('default-api-btn');
-        const customApiBtn = document.getElementById('custom-api-btn');
-        const demoBtn = document.getElementById('demo-btn');
+        const testApiKeyBtn = document.getElementById('test-api-key');
+        const saveApiKeyBtn = document.getElementById('save-api-key');
+        const demoBtn = document.getElementById('demo-mode');
+        const apiStatusEl = document.getElementById('api-status');
         
         // Initialize app
         function initApp() {
@@ -1634,48 +1617,162 @@
             const savedApiKey = localStorage.getItem(API_KEY_STORAGE_KEY);
             
             if (savedApiKey && savedApiKey !== 'demo_mode') {
-                // API key already set, show main app directly
-                passwordModal.style.display = 'none';
-                apiKeyModal.style.display = 'none';
-                mainApp.style.display = 'block';
-                initChatApp(savedApiKey);
+                // Test if saved API key still works
+                testApiKey(savedApiKey).then(isValid => {
+                    if (isValid) {
+                        // API key valid, show main app directly
+                        passwordModal.style.display = 'none';
+                        apiKeyModal.style.display = 'none';
+                        mainApp.style.display = 'block';
+                        initChatApp(savedApiKey);
+                        showNotification('API key valid. Welcome back!', 'success');
+                    } else {
+                        // API key invalid, show API key modal
+                        showNotification('Saved API key is invalid. Please enter a new one.', 'error');
+                        passwordModal.style.display = 'none';
+                        apiKeyModal.style.display = 'flex';
+                        mainApp.style.display = 'none';
+                        apiKeyInput.value = '';
+                        apiKeyInput.focus();
+                    }
+                });
             } else {
                 // Show API key modal
                 passwordModal.style.display = 'none';
                 apiKeyModal.style.display = 'flex';
                 mainApp.style.display = 'none';
                 apiKeyInput.value = '';
+                
+                // Try one of the active API keys
+                tryActiveApiKeys();
             }
         }
         
-        // Use default API key
-        defaultApiBtn.addEventListener('click', () => {
-            localStorage.setItem(API_KEY_STORAGE_KEY, DEFAULT_API_KEY);
-            apiKeyModal.style.display = 'none';
-            mainApp.style.display = 'block';
-            showNotification('Using default API key', 'success');
-            initChatApp(DEFAULT_API_KEY);
-        });
+        // Try active API keys
+        async function tryActiveApiKeys() {
+            apiStatusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mencoba API key aktif...';
+            apiStatusEl.className = 'api-status info';
+            apiStatusEl.style.display = 'flex';
+            
+            for (const apiKey of ACTIVE_API_KEYS) {
+                const isValid = await testApiKey(apiKey);
+                if (isValid) {
+                    apiKeyInput.value = apiKey;
+                    apiStatusEl.innerHTML = `<i class="fas fa-check-circle"></i> API key aktif ditemukan! Klik "Simpan & Lanjutkan"`;
+                    apiStatusEl.className = 'api-status success';
+                    showNotification('API key aktif ditemukan!', 'success');
+                    return;
+                }
+            }
+            
+            apiStatusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Tidak ada API key aktif. Masukkan API key manual.';
+            apiStatusEl.className = 'api-status error';
+        }
         
-        // Use custom API key
-        customApiBtn.addEventListener('click', () => {
+        // Test API key function
+        async function testApiKey(apiKey) {
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`;
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: "user",
+                            parts: [{ text: "Hello" }]
+                        }]
+                    })
+                });
+                
+                if (response.ok) {
+                    return true;
+                } else {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    return false;
+                }
+            } catch (error) {
+                console.error('Test API Error:', error);
+                return false;
+            }
+        }
+        
+        // Test API key button
+        testApiKeyBtn.addEventListener('click', async () => {
             const apiKey = apiKeyInput.value.trim();
             
             if (!apiKey) {
-                showNotification('Please enter an API key!', 'error');
+                apiStatusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Masukkan API key terlebih dahulu!';
+                apiStatusEl.className = 'api-status error';
+                apiStatusEl.style.display = 'flex';
                 return;
             }
             
             if (!apiKey.startsWith('AIza')) {
-                showNotification('Invalid API key format! Gemini API keys start with "AIza"', 'error');
+                apiStatusEl.innerHTML = '<i class="fas fa-exclamation-circle"></i> Format API key tidak valid! Harus dimulai dengan "AIza"';
+                apiStatusEl.className = 'api-status error';
+                apiStatusEl.style.display = 'flex';
                 return;
             }
             
-            localStorage.setItem(API_KEY_STORAGE_KEY, apiKey);
-            apiKeyModal.style.display = 'none';
-            mainApp.style.display = 'block';
-            showNotification('Custom API key saved successfully!', 'success');
-            initChatApp(apiKey);
+            testApiKeyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Testing...';
+            testApiKeyBtn.disabled = true;
+            
+            const isValid = await testApiKey(apiKey);
+            
+            testApiKeyBtn.innerHTML = '<i class="fas fa-vial"></i> Test API Key';
+            testApiKeyBtn.disabled = false;
+            
+            if (isValid) {
+                apiStatusEl.innerHTML = '<i class="fas fa-check-circle"></i> API key valid! Klik "Simpan & Lanjutkan"';
+                apiStatusEl.className = 'api-status success';
+                apiStatusEl.style.display = 'flex';
+                showNotification('API key valid!', 'success');
+            } else {
+                apiStatusEl.innerHTML = '<i class="fas fa-times-circle"></i> API key tidak valid atau error. Periksa kembali.';
+                apiStatusEl.className = 'api-status error';
+                apiStatusEl.style.display = 'flex';
+                showNotification('API key tidak valid. Coba API key lain.', 'error');
+            }
+        });
+        
+        // Save API key button
+        saveApiKeyBtn.addEventListener('click', async () => {
+            const apiKey = apiKeyInput.value.trim();
+            
+            if (!apiKey) {
+                showNotification('Masukkan API key terlebih dahulu!', 'error');
+                return;
+            }
+            
+            if (!apiKey.startsWith('AIza')) {
+                showNotification('Format API key tidak valid!', 'error');
+                return;
+            }
+            
+            saveApiKeyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menyimpan...';
+            saveApiKeyBtn.disabled = true;
+            
+            const isValid = await testApiKey(apiKey);
+            
+            if (isValid) {
+                localStorage.setItem(API_KEY_STORAGE_KEY, apiKey);
+                apiKeyModal.style.display = 'none';
+                mainApp.style.display = 'block';
+                showNotification('API key berhasil disimpan!', 'success');
+                initChatApp(apiKey);
+            } else {
+                apiStatusEl.innerHTML = '<i class="fas fa-times-circle"></i> API key tidak valid. Tidak dapat menyimpan.';
+                apiStatusEl.className = 'api-status error';
+                apiStatusEl.style.display = 'flex';
+                showNotification('API key tidak valid. Tidak dapat menyimpan.', 'error');
+            }
+            
+            saveApiKeyBtn.innerHTML = '<i class="fas fa-save"></i> Simpan & Lanjutkan';
+            saveApiKeyBtn.disabled = false;
         });
         
         // Demo mode
@@ -1683,15 +1780,22 @@
             localStorage.setItem(API_KEY_STORAGE_KEY, 'demo_mode');
             apiKeyModal.style.display = 'none';
             mainApp.style.display = 'block';
-            showNotification('Demo mode activated. Features are limited.', 'info');
+            showNotification('Mode demo diaktifkan. Fitur terbatas.', 'info');
             initChatApp('demo_mode');
+        });
+        
+        // Handle Enter key in API key input
+        apiKeyInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                saveApiKeyBtn.click();
+            }
         });
         
         // ================ CHAT APP INITIALIZATION ================
         function initChatApp(apiKey) {
             // ================ API CONFIGURATION ================
             const API_KEY = apiKey === 'demo_mode' ? '' : apiKey;
-            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
             
             // ================ DOM ELEMENTS ================
             const chatMessages = document.getElementById('chat-messages');
@@ -1713,7 +1817,7 @@
             const responseTimeEl = document.getElementById('response-time');
             const messageCountEl = document.getElementById('message-count');
             const fileCountEl = document.getElementById('file-count');
-            const apiStatusEl = document.getElementById('api-status');
+            const apiStatusText = document.getElementById('api-status-text');
             
             // ================ STATE VARIABLES ================
             let chatHistory = [];
@@ -1724,14 +1828,11 @@
             
             // Update API status display
             if (apiKey === 'demo_mode') {
-                apiStatusEl.textContent = 'Demo';
-                apiStatusEl.style.color = 'var(--warning)';
-            } else if (apiKey === DEFAULT_API_KEY) {
-                apiStatusEl.textContent = 'Default';
-                apiStatusEl.style.color = 'var(--success)';
+                apiStatusText.textContent = 'Demo';
+                apiStatusText.style.color = 'var(--warning)';
             } else {
-                apiStatusEl.textContent = 'Custom';
-                apiStatusEl.style.color = 'var(--secondary)';
+                apiStatusText.textContent = 'Active';
+                apiStatusText.style.color = 'var(--success)';
             }
             
             // ================ UTILITY FUNCTIONS ================
@@ -1931,9 +2032,9 @@
                 if (API_KEY === 'demo_mode') {
                     await new Promise(resolve => setTimeout(resolve, 1500));
                     const demoResponses = [
-                        "**Mode Demo**: Ini adalah respons simulasi dari JOJO AI. Untuk pengalaman penuh, gunakan API key default atau masukkan API key Gemini Anda sendiri.\n\n*Tips: Klik tombol ⚙️ di pojok kanan atas untuk mengganti API key.*",
-                        "**JOJO AI Demo Mode**: Saya sedang beroperasi dalam mode demonstrasi. Fitur AI lengkap tersedia dengan API key valid.\n\n**Contoh kemampuan dengan API key asli:**\n- Analisis gambar dan dokumen\n- Penulisan kreatif dan teknis\n- Pemrograman dan debugging kode\n- Terjemahan dalam berbagai bahasa",
-                        "**Status**: Mode demonstrasi aktif\n**API Key**: Tidak terdeteksi\n**Solusi**: Gunakan API key default yang sudah tersedia atau dapatkan API key gratis dari Google AI Studio.\n\nUntuk bantuan, klik tombol pengaturan (⚙️) di bagian atas chat."
+                        "**Mode Demo**: Ini adalah respons simulasi dari JOJO AI. Untuk pengalaman penuh, masukkan API key Gemini yang valid.\n\n*Tips: Klik tombol ⚙️ di pojok kanan atas untuk mengganti API key.*",
+                        "**JOJO AI Demo Mode**: Saya sedang beroperasi dalam mode demonstrasi. Fitur AI lengkap tersedia dengan API key valid.\n\n**Cara mendapatkan API key gratis:**\n1. Kunjungi https://aistudio.google.com/app/apikey\n2. Login dengan akun Google\n3. Buat API key baru\n4. Tempel di pengaturan JOJO AI",
+                        "**Status**: Mode demonstrasi aktif\n**Solusi**: Gunakan API key Gemini yang valid untuk akses penuh.\n\nUntuk bantuan, klik tombol pengaturan (⚙️) di bagian atas chat."
                     ];
                     return demoResponses[Math.floor(Math.random() * demoResponses.length)];
                 }
@@ -2024,8 +2125,8 @@
                     const responseTime = (endTime - startTime) / 1000;
                     responseTimeEl.textContent = `${responseTime.toFixed(1)}s`;
                     
-                    if (error.message.includes('API key') || error.message.includes('quota')) {
-                        return `**Error API**: ${error.message}\n\n**Solusi:**\n1. Gunakan API key default dengan klik tombol ⚙️ → "Ganti API Key"\n2. Atau dapatkan API key baru dari https://aistudio.google.com/app/apikey`;
+                    if (error.message.includes('API key') || error.message.includes('quota') || error.message.includes('billing')) {
+                        return `**Error API**: ${error.message}\n\n**Solusi:**\n1. Pastikan API key valid\n2. Aktifkan billing di Google Cloud Console (gratis $300 credit)\n3. Kunjungi https://aistudio.google.com/app/apikey untuk API key baru`;
                     }
                     
                     return `**Error**: ${error.message}. Please try again.`;
@@ -2157,6 +2258,7 @@
                     mainApp.style.display = 'none';
                     apiKeyInput.value = '';
                     showNotification('Kembali ke halaman pengaturan API', 'info');
+                    tryActiveApiKeys();
                 }
             });
             
@@ -2167,10 +2269,8 @@
                 
                 if (currentApiKey === 'demo_mode') {
                     apiType = 'Mode Demo';
-                } else if (currentApiKey === DEFAULT_API_KEY) {
-                    apiType = 'API Key Default';
                 } else if (currentApiKey) {
-                    apiType = 'API Key Kustom';
+                    apiType = 'API Key Aktif';
                 }
                 
                 alert(`Status JOJO AI:\n\n• Tipe API: ${apiType}\n• Status: Aktif\n• Pesan: ${messageCount}\n• File: ${fileCount}\n• Login: Terautentikasi\n\nKlik tombol ⚙️ untuk mengganti API key.`);
@@ -2194,12 +2294,12 @@
             userInput.focus();
             console.log('JOJO AI initialized');
             console.log('Developer: ADNAN S.');
-            console.log('API Key Type:', apiKey === 'demo_mode' ? 'Demo Mode' : apiKey === DEFAULT_API_KEY ? 'Default API' : 'Custom API');
+            console.log('API Key Type:', apiKey === 'demo_mode' ? 'Demo Mode' : 'Active API');
             
             // Auto-test API connection for non-demo mode
             if (apiKey !== 'demo_mode') {
                 setTimeout(() => {
-                    showNotification('JOJO AI siap digunakan!', 'success');
+                    showNotification('JOJO AI siap digunakan.', 'success');
                 }, 1000);
             }
         }
